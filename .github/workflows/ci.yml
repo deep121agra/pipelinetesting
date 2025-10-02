@@ -16,7 +16,7 @@ jobs:
       # Step 1: Checkout repository
       - uses: actions/checkout@v3
 
-      # Step 2: Setup Python
+      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -28,19 +28,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Run tests with coverage
+      # Step 4: Set PYTHONPATH
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
+
+      # Step 5: Run tests with pytest and coverage
       - name: Run tests with pytest and coverage
         run: |
           pytest --cov=todo_app --cov-report=xml --cov-report=html
 
-      # Step 5: Upload XML coverage report (for badges or SonarCloud)
+      # Step 6: Upload XML coverage report (for badges or SonarCloud)
       - name: Upload coverage.xml
         uses: actions/upload-artifact@v4
         with:
           name: coverage-xml
           path: coverage.xml
 
-      # Step 6: Upload HTML coverage report as artifact
+      # Step 7: Upload HTML coverage report as artifact
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v4
         with:
